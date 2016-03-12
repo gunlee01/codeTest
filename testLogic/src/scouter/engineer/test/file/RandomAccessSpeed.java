@@ -12,7 +12,29 @@ public class RandomAccessSpeed {
     public static void main(String[] args) {
         RandomAccessSpeed main = new RandomAccessSpeed();
         //main.makeBigfile();
-        main.case4();
+
+        if(args.length > 0 && args[0] != null) {
+            switch (args[0]) {
+                case "1":
+                    main.case1();
+                    break;
+                case "2":
+                    main.case2();
+                    break;
+                case "3":
+                    main.case3();
+                    break;
+                case "4":
+                    main.case4();
+                    break;
+                case "5":
+                    main.case5();
+                    break;
+                case "6":
+                    main.case6();
+                    break;
+            }
+        }
 
     }
 
@@ -115,11 +137,11 @@ public class RandomAccessSpeed {
     /**
      * read and write on random access file - different pointer
      * write 100m buffer 20byte
-     * read 100m buffer 20byte
+     * read 120m buffer 20byte
      * It's better than the same pointer file : 20%~30% better
      */
     public void case4() {
-        String fileName = "testRandomBig.txttestRandomBig.txt";
+        String fileName = "testRandomBig.txt";
 
         int wBufferSize = 20;
         int rBufferSize = 20;
@@ -137,9 +159,61 @@ public class RandomAccessSpeed {
         new RRThread(f, rBufferSize, rLoopSize).start();
     }
 
+    /**
+     * read and write on random access file - same pointer
+     * write 100m buffer 20byte
+     * read 100m buffer 20byte
+     * for AWS EC2 - t2 middle - 100G EBS storage
+     */
+    public void case5() {
+        String fileName = "testRandomBig.txttestRandomBig.txt";
+
+        int wBufferSize = 20;
+        int rBufferSize = 20;
+        long wAccessByte = 1024*1024*100L;
+        long rAccessByte = 1024*1024*240L;
+        int wLoopSize = (int)(wAccessByte / wBufferSize);
+        int rLoopSize = (int)(rAccessByte / rBufferSize);
+
+        System.out.println("[wloop]" + wLoopSize);
+        System.out.println("[rloop]" + rLoopSize);
+
+        FileBoy f = new FileBoy(fileName);
+
+        new WThread(f, wBufferSize, wLoopSize).start();
+        new RThread(f, rBufferSize, rLoopSize).start();
+    }
+
+    /**
+     * read and write on random access file - different pointer
+     * write 100m buffer 20byte
+     * read 240m buffer 20byte
+     * It's better than the same pointer file : 20%~30% better
+     * for AWS EC2 - t2 middle - 100G EBS storage
+     */
+    public void case6() {
+        String fileName = "testRandomBig.txt";
+
+        int wBufferSize = 20;
+        int rBufferSize = 20;
+        long wAccessByte = 1024*1024*100L;
+        long rAccessByte = 1024*1024*240L;
+        int wLoopSize = (int)(wAccessByte / wBufferSize);
+        int rLoopSize = (int)(rAccessByte / rBufferSize);
+
+        System.out.println("[wloop]" + wLoopSize);
+        System.out.println("[rloop]" + rLoopSize);
+
+        FileBoy f = new FileBoy(fileName);
+
+        new WThread(f, wBufferSize, wLoopSize).start();
+        new RRThread(f, rBufferSize, rLoopSize).start();
+    }
+
     public class WThread extends Thread{
         FileBoy boy;
         int bufferSize;
+
         int loopSize;
 
         public WThread(FileBoy boy, int bufferSize, int loopSize) {
@@ -147,7 +221,6 @@ public class RandomAccessSpeed {
             this.bufferSize = bufferSize;
             this.loopSize = loopSize;
         }
-
         @Override
         public void run() {
             byte[] buffer = new byte[bufferSize];
@@ -174,6 +247,7 @@ public class RandomAccessSpeed {
                 e.printStackTrace();
             }
         }
+
     }
 
 
