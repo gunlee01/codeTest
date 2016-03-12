@@ -171,7 +171,7 @@ public class RandomAccessSpeed {
         int wBufferSize = 20;
         int rBufferSize = 20;
         long wAccessByte = 1024*1024*100L;
-        long rAccessByte = 1024*1024*200L;
+        long rAccessByte = 1024*1024*160L;
         int wLoopSize = (int)(wAccessByte / wBufferSize);
         int rLoopSize = (int)(rAccessByte / rBufferSize);
 
@@ -186,7 +186,7 @@ public class RandomAccessSpeed {
 
     /**
      * read and write on random access file - different pointer
-     * write 100m buffer 20byte
+     * write 100m buffer 20by
      * read 240m buffer 20byte
      * It's better than the same pointer file : 20%~30% better
      * for AWS EC2 - t2 middle - 100G EBS storage
@@ -197,7 +197,7 @@ public class RandomAccessSpeed {
         int wBufferSize = 20;
         int rBufferSize = 20;
         long wAccessByte = 1024*1024*100L;
-        long rAccessByte = 1024*1024*200L;
+        long rAccessByte = 1024*1024*160L;
         int wLoopSize = (int)(wAccessByte / wBufferSize);
         int rLoopSize = (int)(rAccessByte / rBufferSize);
 
