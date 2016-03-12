@@ -197,7 +197,7 @@ public class RandomAccessSpeed {
         int wBufferSize = 20;
         int rBufferSize = 20;
         long wAccessByte = 1024*1024*100L;
-        long rAccessByte = 1024*1024*400L;
+        long rAccessByte = 1024*1024*300L;
         int wLoopSize = (int)(wAccessByte / wBufferSize);
         int rLoopSize = (int)(rAccessByte / rBufferSize);
 
