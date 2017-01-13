@@ -6,4 +6,7 @@
    * Collection은 iterable 상속
    * iterable은 foreach 사용가능
     
-...1화 30분까지 시청함
+ * reactive streams  
+   http://www.reactive-streams.org
+   
+   
