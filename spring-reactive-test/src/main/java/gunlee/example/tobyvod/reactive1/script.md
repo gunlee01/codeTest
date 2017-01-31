@@ -10,3 +10,12 @@
    http://www.reactive-streams.org
    
    
+ * Excecutors.newSingleThreadExecutor();
+   - 새로운 thread 에서 동작함
+   
+ * reactive 표준
+  - publisher
+  - subscriber
+  - subscription
+  - processor
+  
