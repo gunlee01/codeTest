@@ -14,8 +14,8 @@ import java.util.stream.Stream;
  * @author Gun Lee (gunlee01@gmail.com) on 2017. 1. 26.
  *
  * Types
- * https://youtu.be/DChIxy9g19o?t=4123 부터 보자
- *
+ * 먼저 구현 Generic type으로 작성후
+ * T, R로 바꿔주면 헷갈리지 않고 좋다
  */
 @Slf4j
 public class PubSub6 {
@@ -25,15 +25,15 @@ public class PubSub6 {
         reducePub.subscribe(logSub());
     }
 
-    private static Publisher<String> reducePub(Publisher<Integer> pub, String init, BiFunction<String, Integer, String> bf) {
-        return new Publisher<String>() {
+    private static <T, R> Publisher<R> reducePub(Publisher<T> pub, R init, BiFunction<R, T, R> bf) {
+        return new Publisher<R>() {
             @Override
-            public void subscribe(Subscriber<? super String> sub) {
-                pub.subscribe(new DelegatePolyType<Integer, String>(sub) {
-                    String result = init;
+            public void subscribe(Subscriber<? super R> sub) {
+                pub.subscribe(new DelegatePolyType<T, R>(sub) {
+                    R result = init;
 
                     @Override
-                    public void onNext(Integer i) {
+                    public void onNext(T i) {
                         result = bf.apply(result, i);
                     }
 
