@@ -1,0 +1,26 @@
+[args]
+// void capArgs(WrContext $ctx, HookArgs $hook)
+//hook_args_patterns=org.apache.catalina.core.AsyncContextImpl.*,org.apache.coyote.Request.*
+
+    String className = $hook.getClassName();
+    String methodName = $hook.getMethodName();
+
+    if("org/apache/catalina/core/AsyncContextImpl".equals(className)) {
+        if("isStarted".equals(methodName)) {
+
+        }
+    }
+
+[return]
+// void capReturn(WrContext $ctx, HookReturn $hook)
+    String className = $hook.getClassName();
+    String methodName = $hook.getMethodName();
+
+    if("org/apache/catalina/core/AsyncContextImpl".equals(className)) {
+        if("isStarted".equals(methodName)) {
+            $ctx.profile(">>>> isStarted : " + $hook.getReturn());
+        }
+    }
+
+[this]
+// void capThis(WrContext $ctx, String $class, String $desc, Object $this)
