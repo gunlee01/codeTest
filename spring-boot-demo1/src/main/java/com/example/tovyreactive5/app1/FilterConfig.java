@@ -1,7 +1,5 @@
 package com.example.tovyreactive5.app1;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -9,11 +7,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class FilterConfig {
-    @Bean
-    public FilterRegistrationBean getFilterRegistrationBean()
-    {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean(new HSTSFilter());
-        // registrationBean.addUrlPatterns("/*"); // 서블릿 등록 빈 처럼 패턴을 지정해 줄 수 있다.
-        return registrationBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean getFilterRegistrationBean()
+//    {
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean(new HSTSFilter());
+//        // registrationBean.addUrlPatterns("/*"); // 서블릿 등록 빈 처럼 패턴을 지정해 줄 수 있다.
+//        return registrationBean;
+//    }
 }

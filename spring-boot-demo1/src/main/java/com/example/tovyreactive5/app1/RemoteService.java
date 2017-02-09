@@ -14,7 +14,7 @@ public class RemoteService {
     public static class MyController {
         @GetMapping("/service")
         public String rest(String req) throws InterruptedException {
-            Thread.sleep(2000);
+            Thread.sleep(   2000);
             return req + "service";
         }
     }

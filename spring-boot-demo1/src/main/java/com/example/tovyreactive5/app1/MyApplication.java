@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.async.DeferredResult;
 
 /**
  * @author Gun Lee (gunlee01@gmail.com) on 2017. 2. 6.
@@ -32,6 +33,11 @@ public class MyApplication {
             return res;
         }
 
+        /**
+         * 비동기로 처리한다
+         * 하나의 thread 만 사용하기 위하여 AryncRestTemplate 사용하며
+         * 응답도 Listenable Future를 리턴한다
+         */
         @GetMapping("/restAsync")
         public ListenableFuture<ResponseEntity<String>> restAsync(int idx) throws InterruptedException {
             ListenableFuture<ResponseEntity<String>> res = art.getForEntity(
@@ -44,6 +50,25 @@ public class MyApplication {
             //그런데 callback에서 return은 의미가 없으니. 어 어떻게 해야하지 하고 고민하게 된다.
             //callback은 spring mvc가 알아서 해준다.
             return res;
+        }
+
+        /**
+         * 결과를 가공하고 싶다면
+         * deferredResult를 사용하여야 한다
+         */
+        @GetMapping("/restAsyncDeferred")
+        public DeferredResult<String> restAsyncDeferred(int idx) throws InterruptedException {
+            DeferredResult<String> dr = new DeferredResult<>();
+
+            ListenableFuture<ResponseEntity<String>> f1 = art.getForEntity(
+                    "http://localhost:8081/service?req={req}", String.class, "hello" + idx);
+            f1.addCallback(s->{
+                dr.setResult(s.getBody() + "/work");
+            }, e->{
+                dr.setErrorResult(e.getMessage());
+            });
+
+            return dr;
         }
     }
 
