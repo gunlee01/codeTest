@@ -1,6 +1,10 @@
 package gunlee.example.servlet.async;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.AsyncContext;
+import javax.servlet.AsyncEvent;
+import javax.servlet.AsyncListener;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author Gun Lee (gunlee01@gmail.com) on 2017. 2. 8.
  */
+@Slf4j
 public class AsyncServlet extends HttpServlet {
     public static Map<Integer, HttpServletResponse> resMap = new HashMap<>();
     public static AtomicInteger counter = new AtomicInteger();
@@ -30,9 +35,10 @@ public class AsyncServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int count = counter.incrementAndGet();
-        System.out.println("[[[[[[[[[Start ! : " + count);
+        log.info("[[[[[[[[[Start ! : " + count);
 
         if ("1".equals(req.getParameter("a"))) {
+            log.info("####11111111111");
             AsyncContext asyncContext = req.startAsync();
             //asyncContext.setTimeout(1500);
 
@@ -41,6 +47,60 @@ public class AsyncServlet extends HttpServlet {
                 return null;
             });
             globalFuture = future;
+
+        } else if ("2".equals(req.getParameter("a"))) {
+            log.info("####222222222222");
+            AsyncContext asyncContext = req.startAsync();
+
+            log.info("AsyncContext=" + asyncContext);
+
+            asyncContext.addListener(new AsyncListener() {
+                AsyncContext myCtx = asyncContext;
+
+                @Override
+                public void onComplete(AsyncEvent event) throws IOException {
+                    log.info("event:onComplete");
+                    log.info("event:onComplete:myCtx=" + myCtx);
+                }
+
+                @Override
+                public void onTimeout(AsyncEvent event) throws IOException {
+                    log.info("event:onTimeout");
+                }
+
+                @Override
+                public void onError(AsyncEvent event) throws IOException {
+                    log.info("event:onError");
+                }
+
+                @Override
+                public void onStartAsync(AsyncEvent event) throws IOException {
+                    log.info("event:onStartAsync");
+                }
+            });
+            es.execute(() -> {
+                try {
+                    doSomething(asyncContext, count);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+
+        } else if ("3".equals(req.getParameter("a"))) {
+            log.info("####33333333333");
+            AsyncContext asyncContext = req.startAsync();
+
+            es.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        AsyncServlet.this.doSomething(asyncContext, count);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         } else if(1==1){
             AsyncContext asyncContext = req.startAsync();
             AtomicInteger loop = new AtomicInteger();
@@ -50,11 +110,11 @@ public class AsyncServlet extends HttpServlet {
             }, 0, 2, TimeUnit.SECONDS);
         }
 
-        System.out.println("[[[[[[[[[doGet End ! : " + count);
+        log.info("[[[[[[[[[doGet End ! : " + count);
     }
 
     private void doSomething2(AsyncContext asyncContext, int count, int loop) {
-        System.out.println("[[[[[[[[[doSomething2 start ! : " + count + " :: " + loop);
+        log.info("[[[[[[[[[doSomething2 start ! : " + count + " :: " + loop);
 
         try {
             PrintWriter out = asyncContext.getResponse().getWriter();
@@ -69,7 +129,7 @@ public class AsyncServlet extends HttpServlet {
             }
             //asyncContext.complete();
         } catch (Throwable e) {
-            System.out.println("%%%%%%%%%%%% exeption $$$$$$$$$$$$$$$");
+            log.info("%%%%%%%%%%%% exeption $$$$$$$$$$$$$$$");
             e.printStackTrace();
         }
     }
@@ -81,9 +141,9 @@ public class AsyncServlet extends HttpServlet {
     }
 
     public void doSomething(AsyncContext asyncContext, int count) throws InterruptedException {
-        System.out.println("[[[[[[[[[Async work start ! : " + count);
+        log.info("[[[[[[[[[Async work start ! : " + count);
         Thread.sleep(3000);
-        System.out.println("[[[[[[[[[Async work end ! : " + count);
+        log.info("[[[[[[[[[Async work end ! : " + count);
 
         try {
             PrintWriter out = asyncContext.getResponse().getWriter();
@@ -92,7 +152,7 @@ public class AsyncServlet extends HttpServlet {
             //throw new IllegalArgumentException("My error");
             asyncContext.complete();
         } catch (Throwable e) {
-            System.out.println("%%%%%%%%%%%% exeption $$$$$$$$$$$$$$$");
+            log.info("%%%%%%%%%%%% exeption $$$$$$$$$$$$$$$");
             e.printStackTrace();
         }
     }

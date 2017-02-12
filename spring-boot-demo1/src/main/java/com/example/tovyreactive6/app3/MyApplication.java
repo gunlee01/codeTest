@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -33,12 +34,19 @@ public class MyApplication {
         @Autowired
         MyService myService;
 
+        @Autowired
+        MyTask myTask;
+
         /**
          * 콜백헬을 벗어나는 원리
          */
         @GetMapping("/rest")
         public DeferredResult<String> rest(int idx) throws InterruptedException {
             DeferredResult<String> dr = new DeferredResult<>();
+
+            Callable<String> callable = myTask::execute;
+
+            Callable<String> callable2 = () -> myTask.execute();
 
             Completion
                     .from(rt.getForEntity(URL1, String.class, "hello" + idx))
@@ -142,6 +150,18 @@ public class MyApplication {
         public ListenableFuture<String> work(String req) {
             return new AsyncResult<>(req + "/asysncwork");
         }
+    }
+
+    @Service
+    public static class MyTask implements PTask {
+        @Override
+        public String execute() {
+            return "execute";
+        }
+    }
+
+    public interface PTask {
+        String execute();
     }
 
     @Bean
