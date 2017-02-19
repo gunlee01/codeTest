@@ -1,10 +1,13 @@
 package com.example.tovyreactive5.app1;
 
+import io.netty.channel.nio.NioEventLoopGroup;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.Netty4ClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -22,6 +25,7 @@ import org.springframework.web.context.request.async.DeferredResult;
  * 여기부터 보자 - https://youtu.be/ExUfZkh7Puk?t=2447
  */
 @SpringBootApplication
+@Slf4j
 public class MyApplication {
 
     @RestController
@@ -29,7 +33,8 @@ public class MyApplication {
         public static final String URL1 = "http://localhost:8081/service?req={req}";
         public static final String URL2 = "http://localhost:8081/service2?req={req}";
         RestTemplate rt = new RestTemplate();
-        AsyncRestTemplate art = new AsyncRestTemplate();
+
+        AsyncRestTemplate art = new AsyncRestTemplate(new Netty4ClientHttpRequestFactory(new NioEventLoopGroup(1)));
 
         @Autowired
         MyService myService;
@@ -52,6 +57,7 @@ public class MyApplication {
          */
         @GetMapping("/restAsync")
         public ListenableFuture<ResponseEntity<String>> restAsync(int idx) throws InterruptedException {
+
             ListenableFuture<ResponseEntity<String>> res = art.getForEntity(
                     "http://localhost:8081/service?req={req}",
                     String.class,
@@ -64,6 +70,13 @@ public class MyApplication {
             return res;
         }
 
+        @GetMapping("/restAsync2")
+        public DeferredResult<String> restAsync2(int idx) throws InterruptedException {
+            DeferredResult<String> dr = new DeferredResult<>();
+            dr.setResult(rt.getForObject("http://localhost:8081/service?req={req}", String.class, "hello" + idx));
+            return dr;
+        }
+
         /**
          * 결과를 가공하고 싶다면
          * deferredResult를 사용하여야 한다
@@ -72,9 +85,11 @@ public class MyApplication {
         public DeferredResult<String> restAsyncDeferred(int idx) throws InterruptedException {
             DeferredResult<String> dr = new DeferredResult<>();
 
+            log.info("[It's restAsyncDeferred start]-" + idx);
             ListenableFuture<ResponseEntity<String>> f1 = art.getForEntity(
                     "http://localhost:8081/service?req={req}", String.class, "hello" + idx);
             f1.addCallback(s -> {
+                log.info("[It's callback]-" + idx);
                 dr.setResult(s.getBody() + "/work");
             }, e -> {
                 dr.setErrorResult(e.getMessage());
@@ -154,6 +169,8 @@ public class MyApplication {
         public ThreadPoolTaskExecutor myThreadPool() {
             ThreadPoolTaskExecutor te = new ThreadPoolTaskExecutor();
             te.setCorePoolSize(1);
+            te.setMaxPoolSize(1);
+
             te.initialize();
             return te;
         }

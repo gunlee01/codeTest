@@ -21,9 +21,10 @@ public class LoadTest {
         ExecutorService es = Executors.newFixedThreadPool(100);
 
         RestTemplate rt = new RestTemplate();
-        String url = "http://localhost:8080/rest?idx={idx}";
+//        String url = "http://localhost:8080/rest?idx={idx}";
+//        String url = "http://localhost:8080/restAsync2?idx={idx}";
 //        String url = "http://localhost:8080/restAsync?idx={idx}";
-//        String url = "http://localhost:8080/restAsyncDeferred?idx={idx}";
+        String url = "http://localhost:8080/restAsyncDeferred?idx={idx}";
 //        String url = "http://localhost:8080/restAsyncDeferred2?idx={idx}";
 
         CyclicBarrier barrier = new CyclicBarrier(101);
