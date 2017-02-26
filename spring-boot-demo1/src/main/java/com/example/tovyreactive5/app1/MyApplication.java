@@ -67,6 +67,10 @@ public class MyApplication {
             //원래는 callback을 등록해야 하고
             //그런데 callback에서 return은 의미가 없으니. 어 어떻게 해야하지 하고 고민하게 된다.
             //callback은 spring mvc가 알아서 해준다.
+            doit();
+            doit2();
+            doit3();
+
             return res;
         }
 
@@ -77,11 +81,36 @@ public class MyApplication {
             return dr;
         }
 
+        public void doit() {
+            for (int i=0; i<100000; i++) {
+                if(i % 10000 == 0) {
+                    System.out.print(i + ",");
+                }
+                System.out.println();
+            }
+        }
+        public void doit2() {
+            for (int i=0; i<10000; i++) {
+                if(i % 10000 == 0) {
+                    System.out.print(i + ",");
+                }
+                System.out.println();
+            }
+        }
+        public void doit3() {
+            for (int i=0; i<1000; i++) {
+                if(i % 1000 == 0) {
+                    System.out.print(i + ",");
+                }
+                System.out.println();
+            }
+        }
+
         /**
          * 결과를 가공하고 싶다면
          * deferredResult를 사용하여야 한다
          */
-        @GetMapping("/restAsyncDeferred")
+            @GetMapping("/restAsyncDeferred")
         public DeferredResult<String> restAsyncDeferred(int idx) throws InterruptedException {
             DeferredResult<String> dr = new DeferredResult<>();
 
@@ -151,6 +180,13 @@ public class MyApplication {
                 dr.setErrorResult(e.getMessage());
             });
 
+            return dr;
+        }
+
+        @GetMapping("/restAsyncChain")
+        public DeferredResult<String> restAsyncChain(int idx) throws InterruptedException {
+            DeferredResult<String> dr = new DeferredResult<>();
+            dr.setResult(rt.getForObject("http://localhost:8082/r1restAsync?idx={idx}", String.class, idx));
             return dr;
         }
 
