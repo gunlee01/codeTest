@@ -11,6 +11,10 @@ public class TraceMethodTestApp2 {
 			Class.forName("xxxxx");
 		}
 		
+		public void do1() {
+			System.out.println("Hello:");
+		}
+		
 //		public static String staticTest() throws InterruptedException {
 //			Runnable r = () -> System.out.println("Inside");
 //			r.run();
