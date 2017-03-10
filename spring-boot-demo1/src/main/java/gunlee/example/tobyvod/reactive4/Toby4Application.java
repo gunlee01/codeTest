@@ -196,6 +196,10 @@ public class Toby4Application {
  * 아님 AsyncContextImpl이나 AsyncContext를 상속한 클래스의 setStarted에서 해보던지..
  * 여기서 리스너를 등록하는 것도 방법일 듯 함..
  *
+ * Async Servlet 사용시.. AsyncContext는 반드시 넘어가는 듯
+ * startAsync의 결과에서 hash를 구한 후에 등록 하고
+ * Runnable의 run() 메소드등에서 어떻게 구할 것인가?
+ *
  * ► txid    = z4ubnfr1had0vb
  ► objName = /GunMac-2.local/Toby4App
  ► endtime = 20170209 19:14:54.078

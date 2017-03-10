@@ -11,16 +11,51 @@
         }
     }
 
+    // String className = $hook.getClassName();
+    // println("[-start]" + className +  "." + methodName + "============>" + $hook.getMethodDesc());
+    // Object[] args = $hook.getArgs();
+    // if(args != null && args.length >= 1) {
+    //     println("[====>args]" + args[0]);
+    //     println("[====>args-syshash]" + System.identityHashCode(args[0]));
+    //     println("[====>args-syshash]" + args[0].getClass());
+    // }
+
+    if(className != null && className.indexOf("java/lang/invoke") == 0 ) {
+        //println("[scouter-plugin-method]" + className +  "." + methodName);
+        // if("metafactory".equals(methodName)) {
+        //     Object[] args = $hook.getArgs();
+        //     String invokeName = (String)args[1];
+        //     java.lang.invoke.MethodHandle methodHandle = (java.lang.invoke.MethodHandle)args[4];
+        //     println("[scouter-plugin-LambdaMetaFactory-metafactory-param-invokeName]" + invokeName);
+        //     println("[scouter-plugin-LambdaMetaFactory-metafactory-param-methodHandle]" + methodHandle);
+        // }
+    }
+
 [return]
 // void capReturn(WrContext $ctx, HookReturn $hook)
     String className = $hook.getClassName();
     String methodName = $hook.getMethodName();
+    //println("[-end]" + className +  "." + methodName + "============>" + $hook.getMethodDesc());
 
-    if("org/apache/catalina/core/AsyncContextImpl".equals(className)) {
-        if("isStarted".equals(methodName)) {
-            $ctx.profile(">>>> isStarted : " + $hook.getReturn());
-        }
-    }
+    // if(className != null && className.indexOf("java/lang/invoke") == 0 ) {
+    //     println("[scouter-plugin-return]" + className +  "." + methodName);
+    //     Object rtn = $hook.getReturn();
+    //     println("[scouter-plugin-return-obj]" + rtn);
+    //     println("[scouter-plugin-return-obj-hash]" + System.identityHashCode(rtn));
+        
+    // }
 
 [this]
 // void capThis(WrContext $ctx, String $class, String $desc, Object $this)
+    // String className = $class;
+    // String desc = $desc;
+    // Object me = $this;
+    // if(className != null && className.indexOf("java/lang/invoke") == 0 ) {
+    //     println("[scouter-plugin-method]" + className +  "#desc#" + desc);
+
+    //     // println("[scouter-plugin-<init>-class]" + className);
+    //     // println("[scouter-plugin-<init>-$desc]" + desc);
+    //     // println("[scouter-plugin-return-$this]" + String.valueOf(me));
+    //     // println("[scouter-plugin-return-obj-hash]" + System.identityHashCode(me));
+        
+    // }
