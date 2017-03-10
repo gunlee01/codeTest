@@ -1,0 +1,23 @@
+[args]
+// void capArgs(WrContext $ctx, HookArgs $hook)		
+	String className = $hook.getClassName();
+	String methodName = $hook.getMethodName();
+
+	println("[hookArgs]" + className + "#" + methodName);
+
+	if("org/springframework/http/client/AbstractBufferingAsyncClientHttpRequest".equals(className)
+		&& ("executeInternal".equals(methodName) || ("ㅋㅋㅋ".equals(methodName)))) {
+
+		Object oHeaders = ($hook.getArgs()[0]);
+	 } 
+
+[return]
+// void capReturn(WrContext $ctx, HookReturn $hook)
+	// String className = $hook.getClassName();
+	// String methodName = $hook.getMethodName();
+
+	// println("[hookReturn]" + className + "#" + methodName + " [rtn] " + $hook.getReturn());
+
+[this]
+// void capThis(WrContext $ctx, String $class, String $desc, Object $this)
+

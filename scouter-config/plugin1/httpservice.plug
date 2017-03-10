@@ -1,0 +1,47 @@
+[start]
+// void start(WrContext $ctx, WrRequest $req, WrResponse $res)
+    //println("Hello"jhjhj);
+	// String userId = (String)$req.getSessionAttribute("sessionUserId");
+	// println("userId=" + userId);
+	// $ctx.login(userId);	
+	// $ctx.hashProfile("[It's user defined profile]" + userId, 0, 0);
+
+
+[end]
+// void end(WrContext $ctx, WrRequest $req, WrResponse $res)
+
+[reject]
+// boolean reject(WrContext $ctx, WrRequest $req, WrResponse $res)
+return false;
+	
+	//String userId = (String)$req.getSessionAttribute("sessionUserId");
+	//println("userId=" + userId);
+	//$ctx.login(userId);	
+	//$ctx.hashProfile("[It's user defined profile]" + userId, 0, 0);
+
+	/*
+	String userId = (String)$req.getSessionAttribute("sessionUserId");
+	$ctx.login(userId);
+	$ctx.hashProfile("External Call [/TPCALL/SVC-HXC0025]", 21, 1024);
+	if(userId != null) {
+		println("[start*]" + $ctx.service() + "==>" + userId);
+		$ctx.profile("UDP-Login:" + userId);
+	} else {
+		$ctx.profile("UDP-Login:GUEST");
+	}*/
+
+//String userId = (String)$req.getSessionAttribute("sessionUserId");
+//println("[start]" + $ctx.service() + "==>" + userId);
+//$ctx.login(userId);
+//$ctx.profile("It's user defined profile " + userId);
+	//	println("$req" + $req.getRequestURI());
+
+	
+	//$ctx.hashProfile("External Call [/TPCALL/SVC-HXC0025]", 21, 1024);	
+	/*if(userId != null) {
+		println("[start*]" + $ctx.service() + "==>" + userId);
+		$ctx.profile("#### It's user defined profile " + userId);
+	} else {
+		println("guest:" + $req.getRemoteAddr());		
+		$ctx.profile("guest:" + $req.getQueryString());
+	}*/
