@@ -41,9 +41,25 @@ public class MyApp3 {
         public DeferredResult<String> ex2() throws InterruptedException {
             DeferredResult<String> dr = new DeferredResult<>();
 
+            System.out.println("[oncode main]" + Thread.currentThread().getName());
             es.submit(() -> {
+                System.out.println("[oncode thread]" + Thread.currentThread().getName());
                 Thread.sleep(2000);
                 return dr.setResult("Hi~");
+            });
+
+            return dr;
+        }
+
+        @GetMapping("/ex3future")
+        public DeferredResult<Long> ex3() throws InterruptedException {
+            DeferredResult<Long> dr = new DeferredResult<>();
+
+            System.out.println("[oncode main]" + Thread.currentThread().getName());
+            es.submit(() -> {
+                System.out.println("[oncode thread]" + Thread.currentThread().getName());
+                Thread.sleep(2000);
+                return dr.setResult(12345678901234L);
             });
 
             return dr;
