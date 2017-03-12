@@ -242,6 +242,109 @@ public class FrontApp {
 
 			return dr;
 		}
+
+		@GetMapping("/ex8")
+		public DeferredResult<String> ex8() throws InterruptedException {
+			DeferredResult<String> dr = new DeferredResult<>();
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(2000);
+						doDo();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					dr.setResult("ex5 deferred hello!");
+				}
+			}).start();
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(1000);
+						doDo();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					dr.setResult("ex5 deferred hello!");
+				}
+			}).run();
+
+			return dr;
+		}
+
+		@GetMapping("/ex9")
+		public DeferredResult<String> ex9() throws InterruptedException {
+			DeferredResult<String> dr = new DeferredResult<>();
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(1000);
+						doDo();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					dr.setResult("ex5 deferred hello!");
+				}
+			}).run();
+
+			return dr;
+		}
+
+		@GetMapping("/ex10")
+		public DeferredResult<String> ex10() throws InterruptedException {
+			DeferredResult<String> dr = new DeferredResult<>();
+
+			Thread t1 = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(1500);
+						doDo1();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					dr.setResult("ex5 deferred hello!");
+				}
+			});
+
+			Thread.sleep(300);
+
+			Thread t2 = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(1000);
+						doDo2();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+
+			t2.start();
+
+			Thread.sleep(300);
+
+			t1.start();
+
+			return dr;
+		}
+
+		public void doDo() {
+			System.out.println("dodo");
+		}
+		public void doDo1() {
+			System.out.println("dodo1");
+		}
+		public void doDo2() {
+			System.out.println("dodo2");
+		}
 	}
 
 

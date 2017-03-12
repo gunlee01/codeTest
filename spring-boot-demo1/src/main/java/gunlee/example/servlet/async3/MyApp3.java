@@ -53,15 +53,6 @@ public class MyApp3 {
             return dr;
         }
 
-        @GetMapping("/ex3future")
-        public DeferredResult<Long> ex3() throws InterruptedException {
-            DeferredResult<Long> dr = new DeferredResult<>();
-
-            System.out.println("[oncode main]" + Thread.currentThread().getName());
-            es.submit(() -> {
-                System.out.println("[oncode thread]" + Thread.currentThread().getName());
-                Thread.sleep(2000);
-                return dr.setResult(12345678901234L);
         //just lambda
         @GetMapping("/ex3")
         public DeferredResult<String> ex3() throws InterruptedException {
@@ -200,7 +191,6 @@ public class MyApp3 {
             }
             log.info("MyThread !!! after sleep");
         }
->>>>>>> 244dad77058c2dc5883272dbc1dc935669b7a849
     }
 
     public static void main(String[] args) {
