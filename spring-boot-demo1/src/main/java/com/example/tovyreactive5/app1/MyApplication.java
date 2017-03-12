@@ -224,6 +224,12 @@ public class MyApplication {
         public static class MyService {
             @Async
             public ListenableFuture<String> work(String req) {
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 return new AsyncResult<>(req + "/asysncwork");
             }
         }
