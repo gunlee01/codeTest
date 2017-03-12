@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.Netty4ClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
@@ -19,6 +20,9 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * @author Gun Lee (gunlee01@gmail.com) on 2017. 2. 6.
  *
@@ -26,6 +30,7 @@ import org.springframework.web.context.request.async.DeferredResult;
  */
 @SpringBootApplication
 @Slf4j
+@EnableAsync
 public class MyApplication {
 
     @RestController
@@ -113,6 +118,7 @@ public class MyApplication {
             @GetMapping("/restAsyncDeferred")
         public DeferredResult<String> restAsyncDeferred(int idx) throws InterruptedException {
             DeferredResult<String> dr = new DeferredResult<>();
+            //TODO ListenableFuture callaback hook !!
 
             log.info("[It's restAsyncDeferred start]-" + idx);
             ListenableFuture<ResponseEntity<String>> f1 = art.getForEntity(
@@ -127,6 +133,24 @@ public class MyApplication {
             return dr;
         }
 
+        ExecutorService es = Executors.newFixedThreadPool(10);
+
+        @GetMapping("/gun1")
+        public DeferredResult<String> gun1(int idx) throws InterruptedException {
+            DeferredResult<String> dr = new DeferredResult<>();
+            es.execute(() -> {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                log.info("My lambda runnable executed!");
+                dr.setResult("ok /gun1");
+            });
+            log.info("invoked /gun1");
+            return dr;
+        }
+
         @GetMapping("/restAsyncDeferred2")
         public DeferredResult<String> restAsyncDeferred2(int idx) throws InterruptedException {
             DeferredResult<String> dr = new DeferredResult<>();
@@ -134,6 +158,9 @@ public class MyApplication {
             ListenableFuture<ResponseEntity<String>> f1 = art.getForEntity(URL1, String.class, "hello" + idx);
 
             f1.addCallback(s -> {
+                //TODO addCallback이 호출되어야 끝나야 하는데.... 그전에 끝나는 군.. 우짜지?
+                //일단 어쩔수는 없을 듯
+
                 ListenableFuture<ResponseEntity<String>> f2 = art.getForEntity(
                         URL2, String.class, s.getBody()
                 );
