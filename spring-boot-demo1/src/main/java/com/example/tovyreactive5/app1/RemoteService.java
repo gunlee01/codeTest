@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RemoteService {
     @RestController
     public static class MyController {
+        @GetMapping("/service5000")
+        public String service5000() throws InterruptedException {
+            Thread.sleep(   5000);
+            return "/service5000";
+        }
+
         @GetMapping("/service")
         public String rest(String req) throws InterruptedException {
             Thread.sleep(   2000);

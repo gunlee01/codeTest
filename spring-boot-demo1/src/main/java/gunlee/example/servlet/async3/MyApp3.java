@@ -1,5 +1,7 @@
 package gunlee.example.servlet.async3;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,10 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * @author Gun Lee (gunlee01@gmail.com) on 2017. 2. 26.
@@ -18,9 +23,31 @@ import java.util.concurrent.Future;
 @SpringBootApplication
 @Slf4j
 public class MyApp3 {
+    @Data
+    @AllArgsConstructor
+    static class Foo {
+        String name;
+        int value;
+    }
 
     @RestController
     public static class ExController {
+        @GetMapping("exToList")
+        public String exToList() {
+            List<Foo> fooList = new ArrayList<>();
+            fooList.add(new Foo("a", 1));
+            fooList.add(new Foo("b", 2));
+            fooList.add(new Foo("c", 3));
+            fooList.add(new Foo("d", 4));
+            fooList.add(new Foo("e", 5));
+            fooList.add(new Foo("f", 6));
+
+            List<Foo> foo2List = fooList.stream().skip(2).limit(3).collect(Collectors.toList());
+
+            System.out.println(foo2List);
+
+            return foo2List.toString();
+        }
 
         @GetMapping("/ex1")
         public DeferredResult<String> ex1() throws InterruptedException {
@@ -37,7 +64,7 @@ public class MyApp3 {
             return dr;
         }
 
-        ExecutorService es = Executors.newCachedThreadPool();
+        ExecutorService es = Executors.newFixedThreadPool(2);
 
         @GetMapping("/ex2future")
         public DeferredResult<String> ex2() throws InterruptedException {
@@ -71,6 +98,41 @@ public class MyApp3 {
             dr.setResult("Hi ex3~");
 
             return dr;
+        }
+
+        @GetMapping("/ex3_1")
+        public String ex3_1() throws InterruptedException {
+
+            Runnable r = () -> {
+                try {
+                    Thread.sleep(1000);
+                    log.info("async lambda");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+
+            es.submit(r);
+
+            return "end ex3_1";
+        }
+
+        @GetMapping("/ex3_2")
+        public String ex3_2() throws InterruptedException {
+            int i = 10;
+
+            Runnable r = () -> {
+                try {
+                    Thread.sleep(1000);
+                    log.info("async lambda with variable capture : " + i);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+
+            es.submit(r);
+
+            return "end ex3_2";
         }
 
         //lambda and thread

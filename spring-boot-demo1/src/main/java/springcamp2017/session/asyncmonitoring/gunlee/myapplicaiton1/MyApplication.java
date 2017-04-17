@@ -1,4 +1,4 @@
-package com.example.tovyreactive5.app1;
+package springcamp2017.session.asyncmonitoring.gunlee.myapplicaiton1;
 
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +20,10 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author Gun Lee (gunlee01@gmail.com) on 2017. 2. 6.
@@ -37,28 +39,12 @@ public class MyApplication {
     public static class MyController {
         public static final String URL1 = "http://localhost:8081/service?req={req}";
         public static final String URL2 = "http://localhost:8081/service2?req={req}";
-        RestTemplate restTemplate = new RestTemplate();
 
+        RestTemplate restTemplate = new RestTemplate();
         AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate(new Netty4ClientHttpRequestFactory(new NioEventLoopGroup(1)));
 
         @Autowired
         MyService myService;
-        private final static String url = "http://localhost:8081/service5000";
-
-        @GetMapping("/callAsync")
-        public String callAscnc() throws InterruptedException {
-            return myService.asyncMethod(); //@Async annotated method
-        }
-
-        @GetMapping("/callBlocking")
-        public String callBlocking(int idx) throws InterruptedException {
-            return restTemplate.getForObject(url, String.class);
-        }
-
-        @GetMapping("/callNonBlocking")
-        public ListenableFuture<ResponseEntity<String>> callNonBlocking() {
-            return asyncRestTemplate.getForEntity(url, String.class);
-        }
 
         /**
          * Blocking Sample
@@ -68,6 +54,39 @@ public class MyApplication {
         public String rest(int idx) throws InterruptedException {
             String res = restTemplate.getForObject("http://localhost:8081/service?req={req}", String.class, "hello" + idx);
             return res;
+        }
+
+        @GetMapping("/asyncSample/deferredResult")
+        public DeferredResult<String> asyncTest1() {
+            DeferredResult<String> deferredResult = new DeferredResult<>();
+
+            new Thread(new Runnable() {
+                public void run() { doSomething(); }
+            }).start();
+
+            return deferredResult;
+        }
+
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        public void asyncTest2() {
+
+            executorService.execute(new Runnable() {
+                public void run() { doSomething(); }
+            });
+
+            Future future = executorService.submit(new Callable() {
+                public Object call() throws Exception {
+                    return doSomething();
+                }
+            });
+
+
+        }
+
+
+        public static int doSomething() {
+            return 0;
         }
 
         /**
@@ -247,13 +266,6 @@ public class MyApplication {
                 }
                 return new AsyncResult<>(req + "/asysncwork");
             }
-
-            @Async
-            public String asyncMethod() {
-                return restTemplate.getForObject(url, String.class);
-            }
-
-            RestTemplate restTemplate = new RestTemplate();
         }
 
         @Bean
