@@ -1,0 +1,37 @@
+// void process(RealCounter $counter)
+
+	//println("[alert-plugin counter] " + $counter.counter());
+	//println("[alert-plugin objHash] " + $counter.objHash());
+	//println("[alert-plugin objName] " + $counter.objName());
+	//println("[alert-plugin objType] " + $counter.objType());
+
+	//println("[alert-plugin intvalue] " + $counter.intValue());
+	//println("[alert-plugin floatValue] " + $counter.floatValue());
+	//println("[alert-plugin historySize] " + $counter.historySize());
+	//println("[alert-plugin silentTime] " + $counter.silentTime());
+	//println("[alert-plugin checkTerm] " + $counter.checkTerm());
+
+	//println("[alert-plugin historyOldestTime] " + $counter.historyOldestTime());
+	//println("[alert-plugin historyCount10] " + $counter.historyCount(10));
+	
+
+// Conf는 고정이다 변하지 않음. 어캐 변하게 할 것인지???
+// historyCount(300)으로 하면 최근 300초간 counter 개수
+// overCount(10, 300) 최근 300초내 값이 10이 넘는 개수
+
+// 선언
+// 최근 얼마간?
+// 얼마를 넘는것이?
+// 몇회?
+
+// 트렌드를 반영하려면
+// 최근 얼마간의 평균을 보관
+
+
+// ** 최근 얼마간이 아닌 과거 얼마간의 값도 보관할 방법 필요 : 급격한 변화를 감지하기 위해
+
+
+
+
+
+//[AlertPlugin] ErrorRate:0.0 obj:/xvapi005.snowcam/API-05-B6C type:B6C-API

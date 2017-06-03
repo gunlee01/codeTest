@@ -1,0 +1,53 @@
+// void process(RealCounter $counter)
+	
+
+	// println("[TPS> floatValue] " + $counter.floatValue());
+	// println("[TPS> historySize] " + $counter.historySize());
+	// println("[TPS> getAvg] " + $counter.getAvg(40, 10));
+	// println("[TPS> getAvg] " + $counter.getLatestAvg(10));
+
+	// println("=========");
+
+	// float a = $counter.getAvg(40, 10);
+	// float b = $counter.getLatestAvg(10); 
+
+	// if(b > 0.5) {
+	// 	$counter.warn("its title", "its message");
+	// }
+
+
+	//$counter.checkTerm(2);
+
+	//println("[TPS> counter] " + $counter.counter());
+	//println("[TPS> objHash] " + $counter.objHash());
+	//println("[TPS> objName] " + $counter.objName());
+	//println("[TPS> objType] " + $counter.objType());
+
+	//println("[TPS> intvalue] " + $counter.intValue());
+
+	//println("[TPS> silentTime] " + $counter.silentTime());
+	//println("[TPS> checkTerm] " + $counter.checkTerm());
+
+	//println("[TPS> historyOldestTime] " + $counter.historyOldestTime());
+	//println("[TPS> historyCount10] " + $counter.historyCount(10));
+	
+
+// Conf는 고정이다 변하지 않음. 어캐 변하게 할 것인지???
+// historyCount(300)으로 하면 최근 300초간 counter 개수
+// overCount(10, 300) 최근 300초내 값이 10이 넘는 개수
+
+// 선언
+// 최근 얼마간?
+// 얼마를 넘는것이?
+// 몇회?
+
+// 트렌드를 반영하려면
+// 최근 얼마간의 평균을 보관
+
+
+// ** 최근 얼마간이 아닌 과거 얼마간의 값도 보관할 방법 필요 : 급격한 변화를 감지하기 위해
+
+
+
+
+
