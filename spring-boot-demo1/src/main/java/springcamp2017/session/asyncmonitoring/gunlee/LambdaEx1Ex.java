@@ -11,9 +11,9 @@ public class LambdaEx1Ex {
     }
 
     //private static synthetic lambda$doIt$0(I)V
-    private static void lambda$doIt$0(int paramIdx) {
-        System.out.println(paramIdx);
-    }
+//    private static void lambda$doIt$0(int paramIdx) {
+//        System.out.println(paramIdx);
+//    }
 
 }
 

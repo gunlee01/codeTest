@@ -45,9 +45,30 @@ public class MyApplication {
         MyService myService;
         private final static String url = "http://localhost:8081/service5000";
 
+//        @GetMapping("/callAsync")
+//        public DeferredResult<String> callAsync() {
+//            //@Async annotated method
+//            return myService.asyncMethod();
+//        }
+
+        @GetMapping("/welcomeToSpringCamp")
+        public String welcomeToSpringCamp() throws InterruptedException {
+            log.info("welcome to spring camp");
+            Thread.sleep(4000);
+            return "welcomeToSpringCamp !";
+        }
+
+        @GetMapping("/helloSpring")
+        public String helloSpring() throws InterruptedException {
+            log.info("hello spring");
+            Thread.sleep(4000);
+            return "helloSpring !";
+        }
+
         @GetMapping("/callAsync")
-        public String callAscnc() throws InterruptedException {
-            return myService.asyncMethod(); //@Async annotated method
+        public ListenableFuture<String> callAsync() {
+            //@Async annotated method
+            return myService.asyncMethod();
         }
 
         @GetMapping("/callBlocking")
@@ -249,8 +270,9 @@ public class MyApplication {
             }
 
             @Async
-            public String asyncMethod() {
-                return restTemplate.getForObject(url, String.class);
+            public ListenableFuture<String> asyncMethod() {
+                return null;
+                //return restTemplate.getForObject(url, String.class);
             }
 
             RestTemplate restTemplate = new RestTemplate();

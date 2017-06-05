@@ -28,6 +28,10 @@ public class MyApp3 {
     static class Foo {
         String name;
         int value;
+
+        public void check() {
+            System.out.println("Check");
+        }
     }
 
     @RestController
@@ -48,6 +52,15 @@ public class MyApp3 {
 
             return foo2List.toString();
         }
+
+        //TODO 이미 인스턴스화 된 클래스의 경우 redefine 하면 어떻게 될 것인가 ??
+        @GetMapping("foo")
+        public String foo() {
+            System.out.println("foo");
+            Foo foo = new Foo("zz", 1);
+            return "zz";
+        }
+
 
         @GetMapping("/ex1")
         public DeferredResult<String> ex1() throws InterruptedException {

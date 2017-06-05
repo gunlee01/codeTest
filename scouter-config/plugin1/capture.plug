@@ -5,11 +5,19 @@
 
 	println("[hookArgs]" + className + "#" + methodName);
 
-	if("org/springframework/http/client/AbstractBufferingAsyncClientHttpRequest".equals(className)
-		&& ("executeInternal".equals(methodName) || ("ㅋㅋㅋ".equals(methodName)))) {
-
-		Object oHeaders = ($hook.getArgs()[0]);
-	 } 
+	try {
+		String[] params = new String[2];
+		params[0] = "gunlee";
+		params[1] = "178";
+		$ctx.parameterizedProfile(0, "My name is %s, height: %s", params);
+		$ctx.parameterizedProfile(1, "My name is %s, height: %s", params);
+		$ctx.parameterizedProfile(2, "My name is %s, height: %s", params);
+		$ctx.parameterizedProfile(3, "My name is %s, height: %s", params);
+		$ctx.parameterizedProfile(4, "My name is %s, height: %s", params);
+	} catch (Throwable t) {
+		t.printStackTrace();
+	}
+	
 
 [return]
 // void capReturn(WrContext $ctx, HookReturn $hook)
