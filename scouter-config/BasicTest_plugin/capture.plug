@@ -1,0 +1,42 @@
+[args]
+// void capArgs(WrContext $ctx, HookArgs $hook)		
+	String className = $hook.getClassName();
+	String methodName = $hook.getMethodName();
+
+	println("[hookArgs]" + className + "#" + methodName);
+
+	Object oTestUser = ($hook.getArgs()[0]);
+	println("[oTestUser]" + oTestUser);
+
+	try {
+		String oTestUserValue = invokeMethod(	oTestUser, 
+												"getAnyWithArg2", 
+												makeArgTypes(String.class, int.class), 
+												makeArgs("testarg1", Integer.valueOf(100)));
+
+		println("[oTestUserValue]" + oTestUserValue);
+		println("====55533333");
+		
+
+
+	} catch(Throwable t) {
+		t.printStackTrace();
+	}
+    
+
+	// if("org/springframework/http/client/AbstractBufferingAsyncClientHttpRequest".equals(className)
+	// 	&& ("executeInternal".equals(methodName) || ("ㅋㅋㅋ".equals(methodName)))) {
+
+	// 	Object oHeaders = ($hook.getArgs()[0]);
+	//  } 
+
+[return]
+// void capReturn(WrContext $ctx, HookReturn $hook)
+	// String className = $hook.getClassName();
+	// String methodName = $hook.getMethodName();
+
+	// println("[hookReturn]" + className + "#" + methodName + " [rtn] " + $hook.getReturn());
+
+[this]
+// void capThis(WrContext $ctx, String $class, String $desc, Object $this)
+
